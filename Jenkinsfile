@@ -2,40 +2,30 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone') {
+        stage('Build Docker Image') {
             steps {
-                echo '📥 Cloning repository...'
+                echo '🔧 Building Docker image...'
+                sh 'docker build -t my-python-app .'
             }
         }
 
-        stage('Build') {
+        stage('Run Docker Container') {
             steps {
-                echo '🔨 Building the project...'
-                sh 'echo build completed'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo '🧪 Running tests...'
-                sh 'echo test passed'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo '🚀 Deploying...'
-                sh 'echo deployed successfully'
+                echo '🚀 Running Docker container...'
+                sh '''
+                    docker rm -f my-running-app || true
+                    docker run -d --name my-running-app -p 8000:8000 my-python-app
+                '''
             }
         }
     }
 
     post {
         success {
-            echo '✅ Pipeline completed successfully.'
+            echo '✅ Docker container is running.'
         }
         failure {
-            echo '❌ Pipeline failed.'
+            echo '❌ Docker build or run failed.'
         }
     }
 }
