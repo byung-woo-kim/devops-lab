@@ -18,6 +18,14 @@ pipeline {
                 '''
             }
         }
+
+        stage('Save Artifacts') {
+            steps {
+                echo '📦 Archiving build artifacts...'
+                sh 'touch output.txt'
+                archiveArtifacts artifacts: 'output.txt', fingerprint: true
+            }
+        }
     }
 
     post {
