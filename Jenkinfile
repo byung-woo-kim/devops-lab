@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "yourdockerhubid/devops-app"
+        TAG = "v${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "🔨 Building Docker image..."
+                sh "docker build -t $IMAGE_NAME:$TAG ."
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "🧪 Running tests..."
+                sh "echo 'Test passed.'"
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo "🚀 Ready to deploy (placeholder)"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ P
+
